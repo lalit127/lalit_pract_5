@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lalit_pract_5/controller/home_controller.dart';
 import 'package:lalit_pract_5/controller/resume_controller.dart';
 import 'package:lalit_pract_5/utils/constants.dart';
 import 'package:lalit_pract_5/widget/common_button.dart';
@@ -16,6 +17,7 @@ class ResumeScreen extends StatefulWidget {
 
 class _ResumeScreenState extends State<ResumeScreen> {
   final resumeCon = Get.put<ResumeController>(ResumeController());
+  final homeCon = Get.put<HomeController>(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,10 @@ class _ResumeScreenState extends State<ResumeScreen> {
           fontWeight: FontWeight.w700,
         ),
         leading: InkWell(
-          onTap: () => Get.back(),
+          onTap: () {
+            homeCon.getAllResumeData();
+            Get.back();
+          },
           child: const Icon(Icons.close),
         ),
       ),
@@ -91,24 +96,21 @@ class _ResumeScreenState extends State<ResumeScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 10),
-            Obx(
-              () => SizedBox(
-                height: resumeCon.skillList.isNotEmpty ? 70 : 0,
-                child: Wrap(
-                  spacing: 8.0,
-                  runSpacing: 8.0,
-                  children: List.generate(
-                    resumeCon.skillList.length,
+            const SizedBox(height: 5),
+            Obx( () => Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: List.generate(
+                resumeCon.skillList.length,
                     (index) => TagItem(
-                      index: index,
-                      onPressed: () => resumeCon.removeSkills(index),
-                      text: resumeCon.skillList.value[index],
-                    ),
-                  ),
+                  index: index,
+                  onPressed: () => resumeCon.removeSkills(index),
+                  text: resumeCon.skillList.value[index],
                 ),
               ),
             ),
+            ),
+            const SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
@@ -126,22 +128,20 @@ class _ResumeScreenState extends State<ResumeScreen> {
             ),
             const SizedBox(height: 10),
             Obx(
-              () => SizedBox(
-                height: resumeCon.socialTagList.isNotEmpty ? 70 : 0,
-                child: Wrap(
-                  spacing: 8.0,
-                  runSpacing: 8.0,
-                  children: List.generate(
-                    resumeCon.socialTagList.length,
-                    (index) => TagItem(
-                      index: index,
-                      onPressed: () => resumeCon.removeSocial(index),
-                      text: resumeCon.socialTagList.value[index],
-                    ),
+              () => Wrap(
+                spacing: 8.0,
+                runSpacing: 8.0,
+                children: List.generate(
+                  resumeCon.socialTagList.length,
+                  (index) => TagItem(
+                    index: index,
+                    onPressed: () => resumeCon.removeSocial(index),
+                    text: resumeCon.socialTagList.value[index],
                   ),
                 ),
               ),
             ),
+            const SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
@@ -159,22 +159,20 @@ class _ResumeScreenState extends State<ResumeScreen> {
             ),
             const SizedBox(height: 10),
             Obx(
-              () => SizedBox(
-                height: resumeCon.experienceList.isNotEmpty ? 70 : 0,
-                child: Wrap(
-                  spacing: 8.0,
-                  runSpacing: 8.0,
-                  children: List.generate(
-                    resumeCon.experienceList.length,
-                    (index) => TagItem(
-                      index: index,
-                      onPressed: () => resumeCon.removeExperience(index),
-                      text: resumeCon.experienceList.value[index],
-                    ),
+              () => Wrap(
+                spacing: 8.0,
+                runSpacing: 8.0,
+                children: List.generate(
+                  resumeCon.experienceList.length,
+                  (index) => TagItem(
+                    index: index,
+                    onPressed: () => resumeCon.removeExperience(index),
+                    text: resumeCon.experienceList.value[index],
                   ),
                 ),
               ),
             ),
+            const SizedBox(height: 10),
             CommonButton(
               onPressed: () => resumeCon.saveResumeData(),
               text: "Create",

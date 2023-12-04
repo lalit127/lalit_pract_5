@@ -5,10 +5,22 @@ import 'package:lalit_pract_5/utils/constants.dart';
 import 'package:lalit_pract_5/view/resume_screen.dart';
 import 'package:lalit_pract_5/widget/common_text.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final homeCon = Get.put<HomeController>(HomeController());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    homeCon.getAllResumeData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,33 +36,50 @@ class HomeScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: GridView.builder(
-        itemCount: 4,
-        gridDelegate:
-            const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-        itemBuilder: (context, index) {
-          index = index + 1;
-          return Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColor.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: CommonText(
-                  text: "Resume $index",
-                  color: AppColor.black,
+      body: Obx(() =>
+         GridView.builder(
+          itemCount: homeCon.resumeList.value.length,
+          gridDelegate:
+              const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          itemBuilder: (context, index) {
+            return
+               Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColor.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Obx(() =>
+                     Column(
+                      children: [
+                        Align(
+                            alignment: Alignment.topRight,
+                            child: IconButton(
+                                onPressed: ()=>homeCon.deleteResume(homeCon.resumeList.value[index]?.id),
+                                icon: Icon(Icons.delete,size: 40,color: AppColor.red,),),),
+                        Align(
+                          alignment: Alignment.center,
+                          child: CommonText(
+                            text: "${homeCon.resumeList.value[index].userName}",
+                            color: AppColor.black,
+                          ),
+                        ),
+                        const Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Icon(Icons.edit,size: 40,)),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Get.to(
-            ResumeScreen(),
+            const ResumeScreen(),
             transition: Transition.rightToLeftWithFade,
             duration: const Duration(milliseconds: 300),
           );

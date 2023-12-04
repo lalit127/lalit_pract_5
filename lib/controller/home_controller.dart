@@ -1,19 +1,30 @@
 import 'package:get/get.dart';
 import 'package:lalit_pract_5/database/database_helper.dart';
+import 'package:lalit_pract_5/model/resume_model.dart';
 
 class HomeController extends GetxController{
 
-  RxList resumeList = [].obs;
+  RxList<ResumeModel> resumeList = <ResumeModel>[].obs;
+  DatabaseHelper dbHelper = DatabaseHelper();
 
- getAllResumeData() async {
+  getAllResumeData() async {
     try {
       DatabaseHelper dbHelper = DatabaseHelper();
       await dbHelper.initializeDatabase();
-      resumeList = (await dbHelper.getAllResumes()) as RxList;
-
-      print('All Resume Data: $resumeList');
+      List<Map<String, dynamic>> result = await dbHelper.getAllResumes();
+      resumeList.value = result.map((resumeData) => ResumeModel.fromJson(resumeData)).toList();
     } catch (e) {
       print('Error getting all resume data: $e');
+    }
+  }
+  deleteResume(int? id) async {
+    try {
+
+      await dbHelper.deleteResume(id!);
+      print('Resume data deleted successfully!');
+      getAllResumeData();
+    } catch (e) {
+      print('Error deleting resume data: $e');
     }
   }
 }

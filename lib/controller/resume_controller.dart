@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lalit_pract_5/database/database_helper.dart';
 import 'package:lalit_pract_5/model/resume_model.dart';
-import 'package:sqflite/sqlite_api.dart';
 
 class ResumeController extends GetxController{
 
@@ -78,34 +76,26 @@ class ResumeController extends GetxController{
 
   saveResumeData() async {
     try {
+
       Map<String, dynamic> resumeData = {
         'userName': userName.text,
         'phoneNumber': phoneNumber.text,
-        'socialLinksList': socialTagList,
-        'skillsList': skillList,
-        'experienceList': experienceList,
+        'socialLinksList': socialTagList.join(','),
+        'skillsList': skillList.join(','),
+        'experienceList': experienceList.join(','),
       };
-      var resume = ResumeModel.fromMap(resumeData);
+      var resume = ResumeModel.fromJson(resumeData);
 
       DatabaseHelper dbHelper = DatabaseHelper();
       await dbHelper.initializeDatabase();
 
       await dbHelper.insertResume(resume);
-      print('Resume data saved successfully!');
+      Get.snackbar("Success", "Data Save Successfully");
     } catch (e) {
       print('Error saving resume data: $e');
     }
   }
 
-  deleteResume(int id) async {
-    try {
-      DatabaseHelper dbHelper = DatabaseHelper();
-      await dbHelper.initializeDatabase();
-      await dbHelper.deleteResume(id);
-      print('Resume data deleted successfully!');
-    } catch (e) {
-      print('Error deleting resume data: $e');
-    }
-  }
+
 
 }

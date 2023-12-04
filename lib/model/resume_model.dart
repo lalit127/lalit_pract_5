@@ -2,9 +2,9 @@ class ResumeModel {
   int? id;
   String? userName;
   String? phoneNumber;
-  List<String>? socialLinksList;
-  List<String>? skillsList;
-  List<String>? experienceList;
+  String? socialLinksList;
+  String? skillsList;
+  String? experienceList;
 
   ResumeModel({
     this.id,
@@ -15,14 +15,14 @@ class ResumeModel {
     this.experienceList,
   });
 
-  factory ResumeModel.fromMap(Map<String, dynamic> map) {
+  factory ResumeModel.fromJson(Map<String, dynamic> map) {
     return ResumeModel(
       id: map['id'],
       userName: map['userName'],
       phoneNumber: map['phoneNumber'],
-      socialLinksList: List<String>.from(map['socialLinksList']),
-      skillsList: List<String>.from(map['skillsList']),
-      experienceList: List<String>.from(map['experienceList']),
+      socialLinksList: map['socialLinksList'],
+      skillsList: map['skillsList'],
+      experienceList: map['experienceList'],
     );
   }
 

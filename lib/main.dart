@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:lalit_pract_5/view/home_screen.dart';
 
 void main() async{
-
   runApp(const MyApp());
 }
 
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: HomeScreen()
+      home: const HomeScreen()
     );
   }
 }

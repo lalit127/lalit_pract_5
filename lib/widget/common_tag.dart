@@ -21,7 +21,7 @@ class _TagItemState extends State<TagItem> {
 
   Widget buildTagItem() {
     return CommonText(
-      text:widget.text,
+      text:widget.text.toString().toUpperCase(),
       fontSize: 20,
       color: AppColor.white,
       fontWeight: FontWeight.w700,
