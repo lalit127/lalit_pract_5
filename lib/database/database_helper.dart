@@ -13,6 +13,7 @@ class DatabaseHelper {
   static const dbTable = "resTable";
   static const String id = 'id';
   static const String userName = 'userName';
+  // static const String profilePicture = 'profilePicture';
   static const String phoneNumber = 'phoneNumber';
   static const String socialLinksList = 'socialLinksList';
   static const String skillsList = 'skillsList';
@@ -36,6 +37,8 @@ class DatabaseHelper {
   }
 
   Future onCreate(Database db, int version) async {
+
+    ///  $profilePicture BLOB  images need to be compressed
     try {
       await db.execute(
           '''
@@ -45,7 +48,8 @@ class DatabaseHelper {
         $phoneNumber TEXT NOT NULL,
         $skillsList TEXT NOT NULL,
         $socialLinksList TEXT NOT NULL,
-        $experienceList TEXT NOT NULL
+        $experienceList TEXT NOT NULL,
+       
       )
       '''
       );
@@ -73,9 +77,29 @@ class DatabaseHelper {
     );
   }
 
-  //Retrieve All Resume
   Future<List<Map<String, dynamic>>> getAllResumes() async {
     Database? db = await databaseHelper.database;
     return db!.query(dbTable);
+  }
+
+  Future<Map<String, dynamic>> getResumeById(int id) async {
+    Database? db = await database;
+    List<Map<String, dynamic>> result = await db!.query(dbTable, where: 'id = ?', whereArgs: [id]);
+
+    if (result.isNotEmpty) {
+      return result.first;
+    } else {
+      throw Exception("No record found with ID $id");
+    }
+  }
+
+  updateResume(ResumeModel resume) async {
+    Database? db = await databaseHelper.database;
+    await db!.update(
+      dbTable,
+      resume.toMap(),
+      where: 'id = ?',
+      whereArgs: [resume.id],
+    );
   }
 }

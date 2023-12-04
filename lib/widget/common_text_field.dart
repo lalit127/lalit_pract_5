@@ -58,20 +58,20 @@ class CommonTextField extends StatelessWidget {
       textInputAction: TextInputAction.newline,
       maxLines: maxLines ?? 1,
       expands: maxLines != null?true:false,
-      style: GoogleFonts.fredoka(fontWeight: FontWeight.w500, fontSize: 16, color: AppColor.black),
+      style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: AppColor.black),
       decoration: InputDecoration(
           suffixIcon: suffix,
         filled: true,
         isDense: true,
         fillColor: fillColor ?? AppColor.white,
         labelText: labelView ?? false ? null : hintText,
-        labelStyle: GoogleFonts.fredoka(
+        labelStyle: TextStyle(
             fontSize: hintTextSize ?? 14,
             color: labelColor ?? AppColor.border,
             fontWeight: fontWeight ?? FontWeight.w500),
-        hintText: hintText??"",
+        // hintText: hintText??"",
         floatingLabelStyle: const TextStyle(color: AppColor.primary),
-        hintStyle: GoogleFonts.fredoka(
+        hintStyle: TextStyle(
             fontSize: hintTextSize ?? 16, color: AppColor.border, fontWeight: fontWeight ?? FontWeight.w500),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radius ?? 10),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lalit_pract_5/controller/home_controller.dart';
 import 'package:lalit_pract_5/controller/resume_controller.dart';
+import 'package:lalit_pract_5/model/resume_model.dart';
 import 'package:lalit_pract_5/utils/constants.dart';
 import 'package:lalit_pract_5/widget/common_button.dart';
 import 'package:lalit_pract_5/widget/common_tag.dart';
@@ -9,7 +10,8 @@ import 'package:lalit_pract_5/widget/common_text.dart';
 import 'package:lalit_pract_5/widget/common_text_field.dart';
 
 class ResumeScreen extends StatefulWidget {
-  const ResumeScreen({Key? key}) : super(key: key);
+  ResumeModel? resumeData;
+  ResumeScreen({Key? key, this.resumeData}) : super(key: key);
 
   @override
   State<ResumeScreen> createState() => _ResumeScreenState();
@@ -26,8 +28,8 @@ class _ResumeScreenState extends State<ResumeScreen> {
       appBar: AppBar(
         elevation: 1,
         centerTitle: true,
-        title: const CommonText(
-          text: "Create Resume",
+        title: CommonText(
+          text: (widget.resumeData != null) ? "Update Resume" : "Create Resume",
           fontSize: 20,
           fontWeight: FontWeight.w700,
         ),
@@ -48,8 +50,8 @@ class _ResumeScreenState extends State<ResumeScreen> {
             Stack(
               alignment: Alignment.center,
               children: [
-                Obx(() =>
-                   Align(
+                Obx(
+                  () => Align(
                     alignment: Alignment.center,
                     child: CircleAvatar(
                       radius: 60,
@@ -59,7 +61,6 @@ class _ResumeScreenState extends State<ResumeScreen> {
                     ),
                   ),
                 ),
-
                 Align(
                   alignment: Alignment.center,
                   child: InkWell(
@@ -73,12 +74,17 @@ class _ResumeScreenState extends State<ResumeScreen> {
             const SizedBox(height: 20),
             CommonTextField(
               hintText: "Enter Full Name",
-              controller: resumeCon.userName,
+              controller: (widget.resumeData != null)
+                  ? TextEditingController(text: widget.resumeData?.userName)
+                  : resumeCon.userName,
             ),
             const SizedBox(height: 20),
             CommonTextField(
               hintText: "Enter Phone Number",
-              controller: resumeCon.phoneNumber,
+              keyboardType: TextInputType.number,
+              controller: (widget.resumeData != null)
+                  ? TextEditingController(text: widget.resumeData?.phoneNumber)
+                  : resumeCon.phoneNumber,
             ),
             const SizedBox(height: 20),
             Row(
@@ -97,18 +103,19 @@ class _ResumeScreenState extends State<ResumeScreen> {
               ],
             ),
             const SizedBox(height: 5),
-            Obx( () => Wrap(
-              spacing: 8.0,
-              runSpacing: 8.0,
-              children: List.generate(
-                resumeCon.skillList.length,
-                    (index) => TagItem(
-                  index: index,
-                  onPressed: () => resumeCon.removeSkills(index),
-                  text: resumeCon.skillList.value[index],
+            Obx(
+              () => Wrap(
+                spacing: 8.0,
+                runSpacing: 8.0,
+                children: List.generate(
+                  resumeCon.skillList.length,
+                  (index) => TagItem(
+                    index: index,
+                    onPressed: () => resumeCon.removeSkills(index),
+                    text: resumeCon.skillList.value[index],
+                  ),
                 ),
               ),
-            ),
             ),
             const SizedBox(height: 10),
             Row(
@@ -174,7 +181,14 @@ class _ResumeScreenState extends State<ResumeScreen> {
             ),
             const SizedBox(height: 10),
             CommonButton(
-              onPressed: () => resumeCon.saveResumeData(),
+              onPressed: () {
+                if (resumeCon.userName.text.isNotEmpty &&
+                    resumeCon.phoneNumber.text.isNotEmpty) {
+                  (widget.resumeData?.userName != null)
+                      ? resumeCon.updateResumeData()
+                      : resumeCon.saveResumeData();
+                }
+              },
               text: "Create",
               fontSize: 18,
               fontWeight: FontWeight.w700,

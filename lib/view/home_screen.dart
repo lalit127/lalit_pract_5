@@ -36,42 +36,54 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         centerTitle: true,
       ),
-      body: Obx(() =>
-         GridView.builder(
+      body: Obx(
+        () => GridView.builder(
           itemCount: homeCon.resumeList.value.length,
-          gridDelegate:
-              const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2),
           itemBuilder: (context, index) {
-            return
-               Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColor.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Obx(() =>
-                     Column(
-                      children: [
-                        Align(
-                            alignment: Alignment.topRight,
-                            child: IconButton(
-                                onPressed: ()=>homeCon.deleteResume(homeCon.resumeList.value[index]?.id),
-                                icon: Icon(Icons.delete,size: 40,color: AppColor.red,),),),
-                        Align(
-                          alignment: Alignment.center,
-                          child: CommonText(
-                            text: "${homeCon.resumeList.value[index].userName}",
-                            color: AppColor.black,
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColor.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Obx(
+                  () => Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                          onPressed: () => homeCon.deleteResume(
+                              homeCon.resumeList.value[index]?.id),
+                          icon: Icon(
+                            Icons.delete,
+                            size: 40,
+                            color: AppColor.red,
                           ),
                         ),
-                        const Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Icon(Icons.edit,size: 40,)),
-                      ],
-                    ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: CommonText(
+                          text: "${homeCon.resumeList.value[index].userName}",
+                          color: AppColor.black,
+                        ),
+                      ),
+                      Align(
+                          alignment: Alignment.bottomCenter,
+                          child: IconButton(
+                              onPressed: () => homeCon.fetchResumeById(
+                                  homeCon.resumeList.value[index]!.id),
+                              icon: Icon(
+                                Icons.edit,
+                                size: 40,
+                              ))),
+                    ],
                   ),
                 ),
+              ),
             );
           },
         ),
@@ -79,14 +91,16 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Get.to(
-            const ResumeScreen(),
+            ResumeScreen(),
             transition: Transition.rightToLeftWithFade,
             duration: const Duration(milliseconds: 300),
           );
         },
         backgroundColor: AppColor.primary,
-        child: const Icon(Icons.add,color: AppColor.white,),
-
+        child: const Icon(
+          Icons.add,
+          color: AppColor.white,
+        ),
       ),
     );
   }

@@ -1,3 +1,7 @@
+
+
+import 'dart:typed_data';
+
 class ResumeModel {
   int? id;
   String? userName;
@@ -5,6 +9,7 @@ class ResumeModel {
   String? socialLinksList;
   String? skillsList;
   String? experienceList;
+  // Uint8List? profilePicture;
 
   ResumeModel({
     this.id,

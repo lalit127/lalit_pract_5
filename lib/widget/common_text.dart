@@ -25,7 +25,6 @@ class CommonText extends StatelessWidget {
     return Text(
       text ?? "",
       style: style??TextStyle(
-        fontFamily: 'Inter',
         decoration: underLine ?? TextDecoration.none,
         fontWeight: fontWeight ?? FontWeight.w500,
         fontSize: fontSize ?? 16,
