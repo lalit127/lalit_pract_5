@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lalit_pract_5/database/database_helper.dart';
 import 'package:lalit_pract_5/model/resume_model.dart';
+import 'package:lalit_pract_5/view/pdf_screen.dart';
 
-class ResumeController extends GetxController{
-
+class ResumeController extends GetxController {
   RxString selectedPath = "".obs;
   final profileImage = Rx<File?>(null);
 
@@ -20,7 +20,7 @@ class ResumeController extends GetxController{
   RxList socialTagList = [].obs;
 
   pickImage() async {
-    try{
+    try {
       final picker = ImagePicker();
       final pickedFile = await picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
@@ -29,10 +29,9 @@ class ResumeController extends GetxController{
       } else {
         Get.snackbar("Erorr", "Something error");
       }
-    }catch(e){
+    } catch (e) {
       print(e);
     }
-
   }
 
   addSkillTag() {
@@ -42,6 +41,7 @@ class ResumeController extends GetxController{
       skillTag.clear();
     }
   }
+
   addSocialLinks() {
     if (socialTag.text.isNotEmpty) {
       socialTagList.add(socialTag.text);
@@ -49,11 +49,13 @@ class ResumeController extends GetxController{
       socialTag.clear();
     }
   }
+
   removeSkills(int index) {
     if (index >= 0 && index < skillList.length) {
       skillList.removeAt(index);
     }
   }
+
   removeSocial(int index) {
     if (index >= 0 && index < socialTagList.length) {
       socialTagList.removeAt(index);
@@ -67,16 +69,15 @@ class ResumeController extends GetxController{
       experienceTag.clear();
     }
   }
+
   removeExperience(int index) {
     if (index >= 0 && index < experienceList.length) {
       experienceList.removeAt(index);
     }
   }
 
-
   saveResumeData() async {
     try {
-
       Map<String, dynamic> resumeData = {
         'userName': userName.text,
         'phoneNumber': phoneNumber.text,
@@ -91,11 +92,13 @@ class ResumeController extends GetxController{
 
       await dbHelper.insertResume(resume);
       Get.snackbar("Success", "Data Save Successfully");
+      Get.to(
+        PdfScreen(),
+        transition: Transition.rightToLeftWithFade,
+        duration: const Duration(milliseconds: 300),
+      );
     } catch (e) {
       print('Error saving resume data: $e');
     }
   }
-
-
-
 }
