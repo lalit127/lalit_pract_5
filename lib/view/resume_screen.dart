@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lalit_pract_5/controller/resume_controller.dart';
 import 'package:lalit_pract_5/utils/constants.dart';
+import 'package:lalit_pract_5/widget/common_button.dart';
 import 'package:lalit_pract_5/widget/common_tag.dart';
 import 'package:lalit_pract_5/widget/common_text.dart';
 import 'package:lalit_pract_5/widget/common_text_field.dart';
@@ -35,23 +36,25 @@ class _ResumeScreenState extends State<ResumeScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
+        child: ListView(
+          physics: BouncingScrollPhysics(),
           children: [
             const SizedBox(height: 20),
             Stack(
               alignment: Alignment.center,
               children: [
-                const Align(
-                  alignment: Alignment.center,
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundImage:
-                        NetworkImage('https://picsum.photos/id/237/200/300'),
+                Obx(() =>
+                   Align(
+                    alignment: Alignment.center,
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundImage: resumeCon.selectedPath.isNotEmpty
+                          ? FileImage(resumeCon.profileImage.value!)
+                          : NetworkImage('https://picsum.photos/id/237/200/300') as ImageProvider<Object>?,
+                    ),
                   ),
                 ),
+
                 Align(
                   alignment: Alignment.center,
                   child: InkWell(
@@ -65,10 +68,12 @@ class _ResumeScreenState extends State<ResumeScreen> {
             const SizedBox(height: 20),
             CommonTextField(
               hintText: "Enter Full Name",
+              controller: resumeCon.userName,
             ),
             const SizedBox(height: 20),
             CommonTextField(
               hintText: "Enter Phone Number",
+              controller: resumeCon.phoneNumber,
             ),
             const SizedBox(height: 20),
             Row(
@@ -89,7 +94,7 @@ class _ResumeScreenState extends State<ResumeScreen> {
             const SizedBox(height: 10),
             Obx(
               () => SizedBox(
-                height: resumeCon.skillList.isNotEmpty ? 100 : 0,
+                height: resumeCon.skillList.isNotEmpty ? 70 : 0,
                 child: Wrap(
                   spacing: 8.0,
                   runSpacing: 8.0,
@@ -104,7 +109,6 @@ class _ResumeScreenState extends State<ResumeScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
@@ -123,7 +127,7 @@ class _ResumeScreenState extends State<ResumeScreen> {
             const SizedBox(height: 10),
             Obx(
               () => SizedBox(
-                height: resumeCon.socialTagList.isNotEmpty ? 100 : 0,
+                height: resumeCon.socialTagList.isNotEmpty ? 70 : 0,
                 child: Wrap(
                   spacing: 8.0,
                   runSpacing: 8.0,
@@ -138,7 +142,6 @@ class _ResumeScreenState extends State<ResumeScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
@@ -156,14 +159,14 @@ class _ResumeScreenState extends State<ResumeScreen> {
             ),
             const SizedBox(height: 10),
             Obx(
-                  () => SizedBox(
-                height: resumeCon.experienceList.isNotEmpty ? 100 : 0,
+              () => SizedBox(
+                height: resumeCon.experienceList.isNotEmpty ? 70 : 0,
                 child: Wrap(
                   spacing: 8.0,
                   runSpacing: 8.0,
                   children: List.generate(
                     resumeCon.experienceList.length,
-                        (index) => TagItem(
+                    (index) => TagItem(
                       index: index,
                       onPressed: () => resumeCon.removeExperience(index),
                       text: resumeCon.experienceList.value[index],
@@ -172,6 +175,12 @@ class _ResumeScreenState extends State<ResumeScreen> {
                 ),
               ),
             ),
+            CommonButton(
+              onPressed: () => resumeCon.saveResumeData(),
+              text: "Create",
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+            )
           ],
         ),
       ),

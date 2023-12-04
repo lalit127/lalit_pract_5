@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lalit_pract_5/view/home_screen.dart';
 
-void main() {
+void main() async{
+
   runApp(const MyApp());
 }
 

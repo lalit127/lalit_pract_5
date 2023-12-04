@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lalit_pract_5/database/database_helper.dart';
+import 'package:lalit_pract_5/model/resume_model.dart';
+import 'package:sqflite/sqlite_api.dart';
 
 class ResumeController extends GetxController{
 
@@ -11,6 +14,8 @@ class ResumeController extends GetxController{
 
   TextEditingController skillTag = TextEditingController();
   TextEditingController socialTag = TextEditingController();
+  TextEditingController phoneNumber = TextEditingController();
+  TextEditingController userName = TextEditingController();
   RxList skillList = [].obs;
   TextEditingController experienceTag = TextEditingController();
   RxList experienceList = [].obs;
@@ -67,6 +72,39 @@ class ResumeController extends GetxController{
   removeExperience(int index) {
     if (index >= 0 && index < experienceList.length) {
       experienceList.removeAt(index);
+    }
+  }
+
+
+  saveResumeData() async {
+    try {
+      Map<String, dynamic> resumeData = {
+        'userName': userName.text,
+        'phoneNumber': phoneNumber.text,
+        'socialLinksList': socialTagList,
+        'skillsList': skillList,
+        'experienceList': experienceList,
+      };
+      var resume = ResumeModel.fromMap(resumeData);
+
+      DatabaseHelper dbHelper = DatabaseHelper();
+      await dbHelper.initializeDatabase();
+
+      await dbHelper.insertResume(resume);
+      print('Resume data saved successfully!');
+    } catch (e) {
+      print('Error saving resume data: $e');
+    }
+  }
+
+  deleteResume(int id) async {
+    try {
+      DatabaseHelper dbHelper = DatabaseHelper();
+      await dbHelper.initializeDatabase();
+      await dbHelper.deleteResume(id);
+      print('Resume data deleted successfully!');
+    } catch (e) {
+      print('Error deleting resume data: $e');
     }
   }
 
