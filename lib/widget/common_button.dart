@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lalit_pract_5/utils/constants.dart';
 import 'package:lalit_pract_5/widget/common_text.dart';
 
-class CommonButton extends StatelessWidget {
+class CommonButton extends StatefulWidget {
   String? text;
   double? radius;
   Color? borderColor;
@@ -40,25 +40,31 @@ class CommonButton extends StatelessWidget {
       this.iconPadding});
 
   @override
+  State<CommonButton> createState() => _CommonButtonState();
+}
+
+class _CommonButtonState extends State<CommonButton> {
+
+  @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPressed,
+      onTap: widget.onPressed,
       child: Container(
-        padding: EdgeInsets.all(containerPadding ?? 0),
-        height: height ?? 52,
+        padding: EdgeInsets.all(widget.containerPadding ?? 0),
+        height: widget.height ?? 52,
         decoration: BoxDecoration(
-          color: color ?? AppColor.primary,
-          borderRadius: BorderRadius.circular(radius ?? 10),
+          color: widget.color ?? AppColor.primary,
+          borderRadius: BorderRadius.circular(widget.radius ?? 10),
           border: Border.all(
-              color: borderColor ?? Colors.transparent,
-              width: borderWidth ?? 1),
+              color: widget.borderColor ?? Colors.transparent,
+              width: widget.borderWidth ?? 1),
         ),
         child: Center(
             child: CommonText(
-                text: text ?? "",
-                color: textColor ?? AppColor.white,
-                fontWeight: fontWeight ?? FontWeight.w500,
-                fontSize: fontSize ?? 16)),
+                text: widget.text ?? "",
+                color: widget.textColor ?? AppColor.white,
+                fontWeight: widget.fontWeight ?? FontWeight.w500,
+                fontSize: widget.fontSize ?? 16)),
       ),
     );
   }

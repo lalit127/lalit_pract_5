@@ -9,6 +9,7 @@ class CommonText extends StatelessWidget {
   final FontWeight? fontWeight;
   final TextAlign? textAlign;
   final TextDecoration? underLine;
+  final TextStyle? style;
 
 
   const CommonText(
@@ -17,13 +18,13 @@ class CommonText extends StatelessWidget {
       this.fontSize,
       this.fontWeight,
       this.textAlign,
-      this.underLine});
+      this.underLine,this.style});
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text ?? "",
-      style: TextStyle(
+      style: style??TextStyle(
         fontFamily: 'Inter',
         decoration: underLine ?? TextDecoration.none,
         fontWeight: fontWeight ?? FontWeight.w500,

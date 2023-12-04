@@ -21,6 +21,7 @@ class CommonTextField extends StatelessWidget {
   bool? showLabelView;
   Color? fillColor;
   int? maxLength;
+  Widget? suffix;
   void Function(String)? onChanged;
 
 
@@ -41,6 +42,7 @@ class CommonTextField extends StatelessWidget {
       this.showLabelView,
       this.fillColor,
       this.maxLength,
+        this.suffix,
       this.onChanged});
 
   @override
@@ -55,8 +57,10 @@ class CommonTextField extends StatelessWidget {
       keyboardType: keyboardType,
       textInputAction: TextInputAction.newline,
       maxLines: maxLines ?? 1,
+      expands: maxLines != null?true:false,
       style: GoogleFonts.fredoka(fontWeight: FontWeight.w500, fontSize: 16, color: AppColor.black),
       decoration: InputDecoration(
+          suffixIcon: suffix,
         filled: true,
         isDense: true,
         fillColor: fillColor ?? AppColor.white,
