@@ -20,12 +20,6 @@ class PdfHelper {
                     style: TextStyle(fontSize: 48)),
                 pw.Text("${resumeModel.phoneNumber}",
                     style: TextStyle(fontSize: 48)),
-                pw.Text("${resumeModel.skillsList}",
-                    style: TextStyle(fontSize: 48)),
-                pw.Text("${resumeModel.socialLinksList}",
-                    style: TextStyle(fontSize: 48)),
-                pw.Text("${resumeModel.experienceList}",
-                    style: TextStyle(fontSize: 48)),
               ]));// Center
         }));
 
