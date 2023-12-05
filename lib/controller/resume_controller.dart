@@ -98,8 +98,8 @@ class ResumeController extends GetxController {
 
         await dbHelper.insertResume(resume);
         Get.snackbar("Success", "Data Save Successfully");
-        final pdfFile = await PdfHelper.generateCenteredtext(resume);
-        PdfHelper.openFile(pdfFile);
+        final pdfFile = await PdfHelper.generatePdf(resume);
+        PdfHelper.openFile(pdfFile,resume);
         print("------------------->File Opened");
       } catch (e) {
         print('Error saving resume data: $e');
@@ -127,8 +127,8 @@ class ResumeController extends GetxController {
         await dbHelper.updateResume(resume);
         Get.snackbar("Success", "Data update Successfully");
         final pdfFile = await
-        PdfHelper.generateCenteredtext(resume);
-        PdfHelper.openFile(pdfFile);
+        PdfHelper.generatePdf(resume);
+        PdfHelper.openFile(pdfFile,resume);
         print("------------------->File Opened");
       } catch (e) {
         print('Error saving resume data: $e');
