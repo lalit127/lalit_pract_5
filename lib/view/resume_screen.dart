@@ -21,6 +21,23 @@ class _ResumeScreenState extends State<ResumeScreen> {
   final resumeCon = Get.put<ResumeController>(ResumeController());
   final homeCon = Get.put<HomeController>(HomeController());
 
+  initializeResumeData() async {
+    resumeCon.userName.value.text = widget.resumeData!.userName!;
+    resumeCon.phoneNumber.value.text = widget.resumeData!.phoneNumber!;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    widget.resumeData?.id != null ? initializeResumeData() : null;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,159 +60,157 @@ class _ResumeScreenState extends State<ResumeScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: ListView(
-          physics: BouncingScrollPhysics(),
-          children: [
-            const SizedBox(height: 20),
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Obx(
-                  () => Align(
+        child:
+           ListView(
+            physics: BouncingScrollPhysics(),
+            children: [
+              const SizedBox(height: 20),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Obx(
+                    () => Align(
+                      alignment: Alignment.center,
+                      child: CircleAvatar(
+                        radius: 60,
+                        backgroundImage: resumeCon.selectedPath.isNotEmpty
+                            ? FileImage(resumeCon.profileImage.value!)
+                            : NetworkImage('https://picsum.photos/id/237/200/300')
+                                as ImageProvider<Object>?,
+                      ),
+                    ),
+                  ),
+                  Align(
                     alignment: Alignment.center,
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundImage: resumeCon.selectedPath.isNotEmpty
-                          ? FileImage(resumeCon.profileImage.value!)
-                          : NetworkImage('https://picsum.photos/id/237/200/300') as ImageProvider<Object>?,
+                    child: InkWell(
+                      onTap: () => resumeCon.pickImage(),
+                      child: Icon(Icons.photo_camera_outlined,
+                          color: Colors.white.withOpacity(0.7)),
                     ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: InkWell(
-                    onTap: () => resumeCon.pickImage(),
-                    child: Icon(Icons.photo_camera_outlined,
-                        color: Colors.white.withOpacity(0.7)),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            CommonTextField(
-              hintText: "Enter Full Name",
-              controller: (widget.resumeData != null)
-                  ? TextEditingController(text: widget.resumeData?.userName)
-                  : resumeCon.userName,
-            ),
-            const SizedBox(height: 20),
-            CommonTextField(
-              hintText: "Enter Phone Number",
-              keyboardType: TextInputType.number,
-              controller: (widget.resumeData != null)
-                  ? TextEditingController(text: widget.resumeData?.phoneNumber)
-                  : resumeCon.phoneNumber,
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: CommonTextField(
-                    controller: resumeCon.skillTag,
-                    hintText: "Add 5 Skills",
-                    suffix: IconButton(
-                      color: AppColor.primary,
-                      onPressed: () => resumeCon.addSkillTag(),
-                      icon: const Icon(Icons.add),
+                ],
+              ),
+              const SizedBox(height: 20),
+              CommonTextField(
+                hintText: "Enter Full Name",
+                controller: resumeCon.userName.value,
+              ),
+              const SizedBox(height: 20),
+              CommonTextField(
+                hintText: "Enter Phone Number",
+                keyboardType: TextInputType.number,
+                controller: resumeCon.phoneNumber.value,
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: CommonTextField(
+                      controller: resumeCon.skillTag.value,
+                      hintText: "Add 5 Skills",
+                      suffix: IconButton(
+                        color: AppColor.primary,
+                        onPressed: () => resumeCon.addSkillTag(),
+                        icon: const Icon(Icons.add),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 5),
-            Obx(
-              () => Wrap(
-                spacing: 8.0,
-                runSpacing: 8.0,
-                children: List.generate(
-                  resumeCon.skillList.length,
-                  (index) => TagItem(
-                    index: index,
-                    onPressed: () => resumeCon.removeSkills(index),
-                    text: resumeCon.skillList.value[index],
+                ],
+              ),
+              const SizedBox(height: 5),
+              Obx(
+                () => Wrap(
+                  spacing: 8.0,
+                  runSpacing: 8.0,
+                  children: List.generate(
+                    resumeCon.skillList.length,
+                    (index) => TagItem(
+                      index: index,
+                      onPressed: () => resumeCon.removeSkills(index),
+                      text: resumeCon.skillList.value[index],
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: CommonTextField(
-                    controller: resumeCon.socialTag,
-                    hintText: "Add Social Links",
-                    suffix: IconButton(
-                      color: AppColor.primary,
-                      onPressed: () => resumeCon.addSocialLinks(),
-                      icon: const Icon(Icons.add),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: CommonTextField(
+                      controller: resumeCon.socialTag.value,
+                      hintText: "Add Social Links",
+                      suffix: IconButton(
+                        color: AppColor.primary,
+                        onPressed: () => resumeCon.addSocialLinks(),
+                        icon: const Icon(Icons.add),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Obx(
+                () => Wrap(
+                  spacing: 8.0,
+                  runSpacing: 8.0,
+                  children: List.generate(
+                    resumeCon.socialTagList.length,
+                    (index) => TagItem(
+                      index: index,
+                      onPressed: () => resumeCon.removeSocial(index),
+                      text: resumeCon.socialTagList.value[index],
                     ),
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Obx(
-              () => Wrap(
-                spacing: 8.0,
-                runSpacing: 8.0,
-                children: List.generate(
-                  resumeCon.socialTagList.length,
-                  (index) => TagItem(
-                    index: index,
-                    onPressed: () => resumeCon.removeSocial(index),
-                    text: resumeCon.socialTagList.value[index],
-                  ),
-                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: CommonTextField(
-                    controller: resumeCon.experienceTag,
-                    hintText: "Add Experience",
-                    suffix: IconButton(
-                      color: AppColor.primary,
-                      onPressed: () => resumeCon.addExperience(),
-                      icon: const Icon(Icons.add),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: CommonTextField(
+                      controller: resumeCon.experienceTag.value,
+                      hintText: "Add Experience",
+                      suffix: IconButton(
+                        color: AppColor.primary,
+                        onPressed: () => resumeCon.addExperience(),
+                        icon: const Icon(Icons.add),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Obx(
+                () => Wrap(
+                  spacing: 8.0,
+                  runSpacing: 8.0,
+                  children: List.generate(
+                    resumeCon.experienceList.length,
+                    (index) => TagItem(
+                      index: index,
+                      onPressed: () => resumeCon.removeExperience(index),
+                      text: resumeCon.experienceList.value[index],
                     ),
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Obx(
-              () => Wrap(
-                spacing: 8.0,
-                runSpacing: 8.0,
-                children: List.generate(
-                  resumeCon.experienceList.length,
-                  (index) => TagItem(
-                    index: index,
-                    onPressed: () => resumeCon.removeExperience(index),
-                    text: resumeCon.experienceList.value[index],
-                  ),
-                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            CommonButton(
-              onPressed: () {
-                if (resumeCon.userName.text.isNotEmpty &&
-                    resumeCon.phoneNumber.text.isNotEmpty) {
-                  (widget.resumeData?.userName != null)
-                      ? resumeCon.updateResumeData()
-                      : resumeCon.saveResumeData();
-                }
-              },
-              text: "Create",
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            )
-          ],
+              const SizedBox(height: 10),
+              CommonButton(
+                onPressed: () {
+                  if (resumeCon.userName.value.text.isNotEmpty &&
+                      resumeCon.phoneNumber.value.text.isNotEmpty) {
+                    (widget.resumeData?.userName != null)
+                        ? resumeCon.updateResumeData(widget.resumeData?.id)
+                        : resumeCon.saveResumeData();
+                  }
+                },
+                text: (widget.resumeData?.userName != null) ? "Update" : "Create",
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+              )
+            ],
+          ),
         ),
-      ),
     );
   }
 }

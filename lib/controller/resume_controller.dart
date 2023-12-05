@@ -12,12 +12,12 @@ class ResumeController extends GetxController {
   final profileImage = Rx<File?>(null);
   late Uint8List uint8List;
 
-  TextEditingController skillTag = TextEditingController();
-  TextEditingController socialTag = TextEditingController();
-  TextEditingController phoneNumber = TextEditingController();
-  TextEditingController userName = TextEditingController();
+  Rx<TextEditingController> skillTag = TextEditingController().obs;
+  Rx<TextEditingController> socialTag = TextEditingController().obs;
+  Rx<TextEditingController> phoneNumber = TextEditingController().obs;
+  Rx<TextEditingController> userName = TextEditingController().obs;
   RxList skillList = [].obs;
-  TextEditingController experienceTag = TextEditingController();
+  Rx<TextEditingController> experienceTag = TextEditingController().obs;
   RxList experienceList = [].obs;
   RxList socialTagList = [].obs;
 
@@ -38,18 +38,18 @@ class ResumeController extends GetxController {
   }
 
   addSkillTag() {
-    if (skillTag.text.isNotEmpty) {
-      skillList.add(skillTag.text);
+    if (skillTag.value.text.isNotEmpty) {
+      skillList.add(skillTag.value.text);
       print(skillList);
-      skillTag.clear();
+      skillTag.value.clear();
     }
   }
 
   addSocialLinks() {
-    if (socialTag.text.isNotEmpty) {
-      socialTagList.add(socialTag.text);
+    if (socialTag.value.text.isNotEmpty) {
+      socialTagList.add(socialTag.value.text);
       print(socialTagList);
-      socialTag.clear();
+      socialTag.value.clear();
     }
   }
 
@@ -66,31 +66,30 @@ class ResumeController extends GetxController {
   }
 
   addExperience() {
-    if (experienceTag.text.isNotEmpty) {
-      experienceList.add(experienceTag.text);
+    if (experienceTag.value.text.isNotEmpty) {
+      experienceList.add(experienceTag.value.text);
       print(experienceList);
-      experienceTag.clear();
+      experienceTag.value.clear();
     }
   }
 
   removeExperience(int index) {
-    if (index >= 0 && index < experienceList.length) {
-      experienceList.removeAt(index);
+    if (index >= 0 && index < experienceList.value.length) {
+      experienceList.value.removeAt(index);
     }
   }
 
   saveResumeData() async {
-    if (profileImage.value!.path.isEmpty) {
+    if (selectedPath.value.isEmpty) {
       Get.snackbar("Error", "Please Choose Image");
     } else {
       try {
         Map<String, dynamic> resumeData = {
-          'userName': userName.text,
-          'phoneNumber': phoneNumber.text,
-          'socialLinksList': socialTagList.join(','),
-          'skillsList': skillList.join(','),
-          'experienceList': experienceList.join(','),
-          'profilePicture': uint8List,
+          'userName': userName.value.text,
+          'phoneNumber': phoneNumber.value.text,
+          'socialLinksList': socialTagList.value.join(','),
+          'skillsList': skillList.value.join(','),
+          'experienceList': experienceList.value.join(','),
         };
         var resume = ResumeModel.fromJson(resumeData);
 
@@ -99,8 +98,7 @@ class ResumeController extends GetxController {
 
         await dbHelper.insertResume(resume);
         Get.snackbar("Success", "Data Save Successfully");
-        final pdfFile = await
-        PdfHelper.generateCenteredtext(resume);
+        final pdfFile = await PdfHelper.generateCenteredtext(resume);
         PdfHelper.openFile(pdfFile);
         print("------------------->File Opened");
       } catch (e) {
@@ -109,18 +107,20 @@ class ResumeController extends GetxController {
     }
   }
 
-  updateResumeData() async {
+  updateResumeData(int? id) async {
       try {
+        print("${userName.value.text}");
         Map<String, dynamic> resumeData = {
-          'userName': userName.text,
-          'phoneNumber': phoneNumber.text,
-          'socialLinksList': socialTagList.join(','),
-          'skillsList': skillList.join(','),
-          'experienceList': experienceList.join(','),
-          'profilePicture': experienceList.join(','),
+          'id':id,
+          'userName': userName.value.text,
+          'phoneNumber': phoneNumber.value.text,
+          'socialLinksList': socialTagList.value.join(','),
+          'skillsList': skillList.value.join(','),
+          'experienceList': experienceList.value.join(','),
         };
-        var resume = ResumeModel.fromJson(resumeData);
 
+        var resume = ResumeModel.fromJson(resumeData);
+        print(resume);
         DatabaseHelper dbHelper = DatabaseHelper();
         await dbHelper.initializeDatabase();
 

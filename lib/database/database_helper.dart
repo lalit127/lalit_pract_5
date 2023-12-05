@@ -48,8 +48,7 @@ class DatabaseHelper {
         $phoneNumber TEXT NOT NULL,
         $skillsList TEXT NOT NULL,
         $socialLinksList TEXT NOT NULL,
-        $experienceList TEXT NOT NULL,
-       
+        $experienceList TEXT NOT NULL
       )
       '''
       );

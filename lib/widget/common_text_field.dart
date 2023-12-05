@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lalit_pract_5/utils/constants.dart';
 
 class CommonTextField extends StatelessWidget {

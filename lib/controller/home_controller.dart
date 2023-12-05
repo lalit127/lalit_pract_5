@@ -20,7 +20,6 @@ class HomeController extends GetxController{
   }
   deleteResume(int? id) async {
     try {
-
       await dbHelper.deleteResume(id!);
       print('Resume data deleted successfully!');
       getAllResumeData();
